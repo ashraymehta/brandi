@@ -65,3 +65,4 @@ typings/
 
 # Webstorm
 .idea/
+.serverless/

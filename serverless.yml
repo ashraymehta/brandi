@@ -5,11 +5,12 @@ frameWorkVersion: ">=1.72.0 <2.0.0"
 
 plugins:
   - serverless-offline
+  - serverless-api-gateway-throttling
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, self:custom.defaultStage}
+  stage: api
   region: ap-south-1
   logs:
     restApi: true
@@ -18,9 +19,10 @@ provider:
 custom:
   serverless-offline:
     httpPort: 9000
-    noPrependStageInUrl: true
     printOutput: true
-  defaultStage: dev
+  apiGatewayThrottling:
+    maxRequestsPerSecond: 10
+    maxConcurrentRequests: 10
 
 package:
   exclude:
