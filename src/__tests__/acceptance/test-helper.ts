@@ -1,8 +1,8 @@
 import {BrandiApplication} from '../..';
 import {
+  Client,
   createRestAppClient,
   givenHttpServerConfig,
-  Client,
 } from '@loopback/testlab';
 
 export async function setupApplication(): Promise<AppWithClient> {
