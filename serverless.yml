@@ -44,6 +44,7 @@ functions:
       - http: ANY {proxy+}
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: config/google/${self:provider.stage}.json
+      RITEKIT_CONFIG: config/ritekit/${self:provider.stage}.json
 
 resources:
   # The "Outputs" that your AWS CloudFormation Stack should produce.  This allows references between services.

@@ -20,7 +20,7 @@ export class RitekitDataSource extends juggler.DataSource
     @inject('datasources.config.ritekit', {optional: true})
     dsConfig: object = config,
   ) {
-    super({transformResponse, ...dsConfig});
+    super({transformResponse: transformResponse, ...dsConfig});
   }
 }
 
@@ -39,6 +39,5 @@ function transformResponse(response: {
   if (response.status < 400) {
     return response.body ?? response.text;
   }
-  const err = HttpErrors(response.status, response.statusText, response);
-  throw err;
+  throw HttpErrors(response.status, response.statusText, response);
 }
