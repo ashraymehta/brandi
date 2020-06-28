@@ -1,13 +1,16 @@
 import {URL} from 'url';
 import {customsearch_v1} from 'googleapis';
-import {bind, BindingScope} from '@loopback/core';
+import {bind, BindingScope, inject} from '@loopback/core';
+import {DependencyInjectionKeys} from '../utils/dependency-injection.keys';
 import Customsearch = customsearch_v1.Customsearch;
 
 @bind({scope: BindingScope.TRANSIENT})
 export class GoogleSearchService {
-  private readonly customSearch: customsearch_v1.Customsearch;
+  private readonly customSearch: Customsearch;
 
-  constructor(customSearch: Customsearch) {
+  constructor(
+    @inject(DependencyInjectionKeys.CUSTOM_SEARCH) customSearch: Customsearch,
+  ) {
     this.customSearch = customSearch;
   }
 

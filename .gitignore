@@ -66,3 +66,6 @@ typings/
 # Webstorm
 .idea/
 .serverless/
+
+# Configuration
+config/google/
