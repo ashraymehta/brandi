@@ -14,6 +14,6 @@ export class LogoController {
     @param.query.number('brand-name') brandName: string,
   ): Promise<void> {
     // TODO - Validate brand-name
-    this.logoService.getFor(brandName);
+    await this.logoService.getFor(brandName);
   }
 }

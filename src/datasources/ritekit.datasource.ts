@@ -1,8 +1,4 @@
-import {
-  inject,
-  lifeCycleObserver,
-  LifeCycleObserver,
-} from '@loopback/core';
+import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
 
@@ -32,13 +28,13 @@ export class RitekitDataSource extends juggler.DataSource
  * Transform the http response into the return value
  */
 function transformResponse(response: {
-  url: string,
-  method: string,
-  status: number,
-  statusText: string,
-  headers: object,
-  text: string,
-  body: unknown,
+  url: string;
+  method: string;
+  status: number;
+  statusText: string;
+  headers: object;
+  text: string;
+  body: unknown;
 }) {
   if (response.status < 400) {
     return response.body ?? response.text;
