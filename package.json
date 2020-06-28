@@ -53,6 +53,7 @@
     "@loopback/repository": "^2.8.0",
     "@loopback/rest": "^5.1.2",
     "@loopback/service-proxy": "^2.3.3",
+    "googleapis": "^52.1.0",
     "serverless-http": "^2.5.0",
     "tslib": "^2.0.0"
   },
@@ -60,8 +61,10 @@
     "@loopback/build": "^6.0.0",
     "@loopback/eslint-config": "^8.0.2",
     "@loopback/testlab": "^3.1.8",
+    "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "@types/node": "^10.17.26",
+    "chai": "^4.2.0",
     "eslint": "^7.3.1",
     "mocha": "^8.0.1",
     "serverless": "^1.74.0",

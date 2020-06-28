@@ -1,6 +1,6 @@
-import {LogoController} from '../../controllers';
-import {LogoService} from '../../services';
+import {LogoService} from '../../../services';
 import {instance, mock, verify} from 'ts-mockito';
+import {LogoController} from '../../../controllers';
 
 describe(LogoController.name, () => {
   const logoService = mock(LogoService);
