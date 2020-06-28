@@ -54,6 +54,7 @@
     "@loopback/rest": "^5.1.2",
     "@loopback/service-proxy": "^2.3.3",
     "googleapis": "^52.1.0",
+    "loopback-connector-openapi": "^6.1.0",
     "serverless-http": "^2.5.0",
     "tslib": "^2.0.0"
   },
