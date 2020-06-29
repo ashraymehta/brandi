@@ -1,52 +1,25 @@
-import {get, Request, ResponseObject, RestBindings} from '@loopback/rest';
-import {inject} from '@loopback/core';
+import {Request} from 'express';
+import {getLogger} from '../utils/logger.util';
+import JsonResult from 'inversify-express-utils/dts/results/JsonResult';
+import {
+  BaseHttpController,
+  controller,
+  httpGet,
+  request,
+} from 'inversify-express-utils';
 
-/**
- * OpenAPI response for ping()
- */
-const PING_RESPONSE: ResponseObject = {
-  description: 'Ping Response',
-  content: {
-    'application/json': {
-      schema: {
-        type: 'object',
-        title: 'PingResponse',
-        properties: {
-          greeting: {type: 'string'},
-          date: {type: 'string'},
-          url: {type: 'string'},
-          headers: {
-            type: 'object',
-            properties: {
-              'Content-Type': {type: 'string'},
-            },
-            additionalProperties: true,
-          },
-        },
-      },
-    },
-  },
-};
+@controller('/ping')
+export class PingController extends BaseHttpController {
+  private readonly logger = getLogger(PingController.name);
 
-/**
- * A simple controller to bounce back http requests
- */
-export class PingController {
-  constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
-
-  // Map to `GET /ping`
-  @get('/ping', {
-    responses: {
-      '200': PING_RESPONSE,
-    },
-  })
-  ping(): object {
-    // Reply with a greeting, the current time, the url, and request headers
-    return {
-      greeting: 'Hello from LoopBack',
+  @httpGet('/')
+  public async ping(@request() req: Request): Promise<JsonResult> {
+    this.logger.info(`Received ping request.`);
+    return this.json({
+      greeting: 'Hello!',
       date: new Date(),
-      url: this.req.url,
-      headers: Object.assign({}, this.req.headers),
-    };
+      url: req.url,
+      headers: Object.assign({}, req.headers),
+    });
   }
 }

@@ -1,32 +1,13 @@
-import {BrandiApplication} from '../..';
-import {
-  Client,
-  createRestAppClient,
-  givenHttpServerConfig,
-} from '@loopback/testlab';
+import 'reflect-metadata';
+import {Server} from 'http';
+import {Application} from 'express';
+import {AllSetupSteps} from '../../setup/all-setup.steps';
 
-export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({
-    // Customize the server configuration here.
-    // Empty values (undefined, '') will be ignored by the helper.
-    //
-    // host: process.env.HOST,
-    // port: +process.env.PORT,
-  });
-
-  const app = new BrandiApplication({
-    rest: restConfig,
-  });
-
-  await app.boot();
-  await app.start();
-
-  const client = createRestAppClient(app);
-
-  return {app, client};
-}
-
-export interface AppWithClient {
-  app: BrandiApplication;
-  client: Client;
+export async function startApplication(): Promise<{
+  server: Server;
+  app: Application;
+}> {
+  const setupData = await new AllSetupSteps().execute();
+  setupData.application.listen();
+  return {server: setupData.application.listen(), app: setupData.application};
 }

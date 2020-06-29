@@ -1,18 +1,15 @@
 import {URL} from 'url';
+import {injectable} from 'inversify';
 import {customsearch_v1} from 'googleapis';
-import {bind, BindingScope, inject} from '@loopback/core';
-import {DependencyInjectionKeys} from '../utils/dependency-injection.keys';
 import {getLogger} from '../utils/logger.util';
 import Customsearch = customsearch_v1.Customsearch;
 
-@bind({scope: BindingScope.TRANSIENT})
+@injectable()
 export class GoogleSearchService {
   private readonly customSearch: Customsearch;
   private readonly logger = getLogger(GoogleSearchService.name);
 
-  constructor(
-    @inject(DependencyInjectionKeys.CUSTOM_SEARCH) customSearch: Customsearch,
-  ) {
+  constructor(customSearch: Customsearch) {
     this.customSearch = customSearch;
   }
 

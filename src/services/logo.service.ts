@@ -1,15 +1,15 @@
-import {bind, BindingScope, service} from '@loopback/core';
+import {injectable} from 'inversify';
 import {GoogleSearchService} from './google-search.service';
 import {CompanyInsightsService} from './company-insights.service';
 
-@bind({scope: BindingScope.TRANSIENT})
+@injectable()
 export class LogoService {
   private readonly googleSearchService: GoogleSearchService;
   private readonly companyInsightsService: CompanyInsightsService;
 
   constructor(
-    @service() googleSearchService: GoogleSearchService,
-    @service() companyInsightsService: CompanyInsightsService,
+    googleSearchService: GoogleSearchService,
+    companyInsightsService: CompanyInsightsService,
   ) {
     this.googleSearchService = googleSearchService;
     this.companyInsightsService = companyInsightsService;
