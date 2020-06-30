@@ -39,7 +39,8 @@
     "inversify-express-utils": "6.3.2",
     "loopback-connector-openapi": "^6.1.0",
     "serverless-http": "^2.5.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "typed-rest-client": "^1.7.3"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",

@@ -68,5 +68,7 @@ typings/
 .serverless/
 
 # Configuration
-config/google/
-config/ritekit/
+config/
+
+# MacOS
+.DS_Store
