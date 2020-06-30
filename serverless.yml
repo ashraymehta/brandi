@@ -23,6 +23,7 @@ custom:
   apiGatewayThrottling:
     maxRequestsPerSecond: 10
     maxConcurrentRequests: 10
+  secrets: ${file(config/secrets.${opt:stage, self:provider.stage}.yml)}
 
 package:
   exclude:
@@ -43,8 +44,9 @@ functions:
       - http: ANY /
       - http: ANY {proxy+}
     environment:
-      GOOGLE_APPLICATION_CREDENTIALS: config/google/${self:provider.stage}.json
-      RITEKIT_CONFIG: config/ritekit/${self:provider.stage}.json
+      GOOGLE_SEARCH_API_KEY: ${self:custom.secrets.google-search-api-key}
+      GOOGLE_SEARCH_ENGINE_ID: ${self:custom.secrets.google-search-engine-id}
+      RITEKIT_API_KEY: ${self:custom.secrets.ritekit-api-key}
 
 resources:
   # The "Outputs" that your AWS CloudFormation Stack should produce.  This allows references between services.
