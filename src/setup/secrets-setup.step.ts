@@ -1,6 +1,4 @@
 import {google} from 'googleapis';
-import '../controllers/logo.controller';
-import '../controllers/ping.controller';
 import {ConfigUtil} from '../utils/config.util';
 import {SetupData, SetupStep} from './setup.step';
 

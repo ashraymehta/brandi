@@ -14,4 +14,8 @@ export class ConfigUtil {
   public async getGoogleSearchEngineId(): Promise<string> {
     return process.env['GOOGLE_SEARCH_ENGINE_ID'] as string;
   }
+
+  public async getMongoDbUri(): Promise<string> {
+    return process.env['MONGODB_URI'] as string;
+  }
 }
