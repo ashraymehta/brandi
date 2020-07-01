@@ -16,9 +16,7 @@ export class RitekitGateway {
   public async getCompanyLogo(domain: string) {
     const httpClient = new HttpClient(undefined);
     const ritekiteApiKey = await this.configUtil.getRitekitApiKey();
-    this.logger.info(
-      `Requesting logo for domain [${domain}] with api key [${ritekiteApiKey}].`,
-    );
+    this.logger.info(`Requesting logo for domain [${domain}].`);
     const clientResponse = await httpClient.get(
       `https://api.ritekit.com?client_id=${ritekiteApiKey}`,
     );
