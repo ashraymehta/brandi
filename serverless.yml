@@ -5,18 +5,20 @@ frameWorkVersion: ">=1.72.0 <2.0.0"
 
 plugins:
   - serverless-offline
+  - serverless-s3-local
   - serverless-api-gateway-throttling
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  stage: ${opt:stage, self:custom.default-stage}
   region: ap-south-1
   logs:
     restApi: true
     httpApi: true
 
 custom:
+  default-stage: local
   serverless-offline:
     httpPort: 9000
     printOutput: true
@@ -24,6 +26,9 @@ custom:
     maxRequestsPerSecond: 10
     maxConcurrentRequests: 10
   secrets: ${file(config/secrets.${opt:stage, self:provider.stage}.yml)}
+  s3:
+    host: localhost
+    directory: ~/s3/${opt:stage, self:provider.stage}
 
 package:
   exclude:
@@ -35,7 +40,7 @@ package:
 functions:
   loopback:
     handler: dist/lambda-wrapper.handler
-    name: '${self:provider.stage}-brandi'
+    name: 'brandi-${self:provider.stage}'
     description: Brandi
     memorySize: 512
     timeout: 60
@@ -48,8 +53,16 @@ functions:
       RITEKIT_API_KEY: ${self:custom.secrets.ritekit-api-key}
       MONGODB_URI: ${self:custom.secrets.mongodb-uri}
       RITEKIT_API_BASE_URL: https://api.ritekit.com/
+      AWS_ACCESS_KEY_ID: ${self:custom.secrets.aws-access-key-id}
+      AWS_SECRET_ACCESS_KEY: ${self:custom.secrets.aws-secret-access-key}
+      AWS_S3_ENDPOINT: ${self:custom.secrets.aws-s3-endpoint}
 
 resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: 'brandi-${opt:stage, self:provider.stage}'
   # The "Outputs" that your AWS CloudFormation Stack should produce.  This allows references between services.
   Outputs:
     LoopbackPostman:

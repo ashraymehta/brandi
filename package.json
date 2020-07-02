@@ -32,6 +32,7 @@
     "type": "git"
   },
   "dependencies": {
+    "aws-sdk": "2.709.0",
     "aws-serverless-express": "^3.3.8",
     "express": "4.17.1",
     "googleapis": "^52.1.0",
@@ -40,8 +41,8 @@
     "loopback-connector-openapi": "^6.1.0",
     "mongodb": "3.5.9",
     "serverless-http": "^2.5.0",
-    "tslib": "^2.0.0",
-    "superagent": "^5.3.1"
+    "superagent": "^5.3.1",
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@types/chai": "4.2.11",
@@ -62,6 +63,7 @@
     "serverless": "^1.74.0",
     "serverless-api-gateway-throttling": "^1.0.1",
     "serverless-offline": "^6.4.0",
+    "serverless-s3-local": "0.6.2",
     "source-map-support": "^0.5.19",
     "supertest": "^4.0.2",
     "ts-mockito": "2.6.1",

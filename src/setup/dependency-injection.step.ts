@@ -5,6 +5,7 @@ import '../controllers/ping.controller';
 import {ConfigUtil} from '../utils/config.util';
 import {SetupData, SetupStep} from './setup.step';
 import {customsearch_v1, google} from 'googleapis';
+import AWS = require('aws-sdk');
 import Customsearch = customsearch_v1.Customsearch;
 
 export class DependencyInjectionStep implements SetupStep {
@@ -18,6 +19,17 @@ export class DependencyInjectionStep implements SetupStep {
       return async () => {
         const uri = await container.get(ConfigUtil).getMongoDbUri();
         return MongoClient.connect(uri);
+      };
+    });
+
+    container.bind(AWS.S3).toProvider(() => {
+      return async () => {
+        const configUtil = container.get(ConfigUtil);
+        return new AWS.S3({
+          endpoint: await configUtil.getAWSS3Endpoint(),
+          accessKeyId: await configUtil.getAWSAccessKeyId(),
+          secretAccessKey: await configUtil.getAWSSecretAccessKey(),
+        });
       };
     });
 
