@@ -16,7 +16,7 @@
     "prettier:fix": "prettier --write \"**/*.ts\" \"**/*.js\"",
     "eslint": "eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
-    "pretest": "npm run clean && npm run build",
+    "pretest": "npm run clean && npm run build && cp -R src/__tests__/resources dist/__tests__/",
     "test": "mocha \"dist/__tests__\"",
     "posttest": "npm run lint",
     "prestart": "npm run build",
@@ -41,7 +41,7 @@
     "mongodb": "3.5.9",
     "serverless-http": "^2.5.0",
     "tslib": "^2.0.0",
-    "typed-rest-client": "^1.7.3"
+    "superagent": "^5.3.1"
   },
   "devDependencies": {
     "@types/chai": "4.2.11",
@@ -55,6 +55,7 @@
     "eslint-config-prettier": "^6.11.0",
     "log4js": "^6.3.0",
     "mocha": "^8.0.1",
+    "nock": "^13.0.1",
     "prettier": "^2.0.5",
     "reflect-metadata": "0.1.13",
     "serverless": "^1.74.0",

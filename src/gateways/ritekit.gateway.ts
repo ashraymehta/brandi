@@ -1,8 +1,7 @@
-import {once} from 'events';
 import {injectable} from 'inversify';
 import {getLogger} from '../utils/logger.util';
 import {ConfigUtil} from '../utils/config.util';
-import {HttpClient} from 'typed-rest-client/HttpClient';
+import superagent = require('superagent');
 
 @injectable()
 export class RitekitGateway {
@@ -13,13 +12,16 @@ export class RitekitGateway {
     this.configUtil = configUtil;
   }
 
-  public async getCompanyLogo(domain: string) {
-    const httpClient = new HttpClient(undefined);
+  public async getCompanyLogo(domain: string): Promise<Buffer> {
     const ritekiteApiKey = await this.configUtil.getRitekitApiKey();
-    this.logger.info(`Requesting logo for domain [${domain}].`);
-    const clientResponse = await httpClient.get(
-      `https://api.ritekit.com?client_id=${ritekiteApiKey}`,
+    const ritekitApiBaseUrl = await this.configUtil.getRitekitApiBaseUrl();
+    this.logger.info(
+      `Requesting logo for domain [${domain}] from [${ritekitApiBaseUrl}].`,
     );
-    return await once(clientResponse.message, 'data');
+    return (
+      await superagent.get(
+        `${ritekitApiBaseUrl}v1/images/logo/?client_id=${ritekiteApiKey}&domain=${domain}`,
+      )
+    ).body as Buffer;
   }
 }

@@ -18,4 +18,8 @@ export class ConfigUtil {
   public async getMongoDbUri(): Promise<string> {
     return process.env['MONGODB_URI'] as string;
   }
+
+  public async getRitekitApiBaseUrl(): Promise<string> {
+    return process.env['RITEKIT_API_BASE_URL'] as string;
+  }
 }
