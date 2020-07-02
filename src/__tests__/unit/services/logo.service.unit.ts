@@ -2,14 +2,14 @@ import {URL} from 'url';
 import {expect} from 'chai';
 import {instance, mock, when} from 'ts-mockito';
 import {
-  CompanyInsightsService,
+  DomainLogoService,
   GoogleSearchService,
   LogoService,
 } from '../../../services';
 
 describe(LogoService.name, function () {
   const googleSearchService = mock(GoogleSearchService);
-  const companyInsightsService = mock<CompanyInsightsService>();
+  const companyInsightsService = mock<DomainLogoService>();
   const logoService = new LogoService(
     instance(googleSearchService),
     instance(companyInsightsService),

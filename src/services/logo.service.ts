@@ -1,15 +1,15 @@
 import {injectable} from 'inversify';
+import {DomainLogoService} from './domain-logo.service';
 import {GoogleSearchService} from './google-search.service';
-import {CompanyInsightsService} from './company-insights.service';
 
 @injectable()
 export class LogoService {
   private readonly googleSearchService: GoogleSearchService;
-  private readonly companyInsightsService: CompanyInsightsService;
+  private readonly companyInsightsService: DomainLogoService;
 
   constructor(
     googleSearchService: GoogleSearchService,
-    companyInsightsService: CompanyInsightsService,
+    companyInsightsService: DomainLogoService,
   ) {
     this.googleSearchService = googleSearchService;
     this.companyInsightsService = companyInsightsService;
