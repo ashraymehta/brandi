@@ -28,7 +28,6 @@ custom:
 package:
   exclude:
     - .idea/**
-    - data/**
     - dist/__tests__/**
     - src/**
     - tsconfig.tsbuildinfo
