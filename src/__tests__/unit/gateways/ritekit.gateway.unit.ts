@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {expect} from 'chai';
 import {constants} from 'http2';
 import {instance, mock, when} from 'ts-mockito';
@@ -33,9 +34,12 @@ describe(RitekitGateway.name, () => {
         'Transfer-Encoding': 'chunked',
       });
 
-    const companyLogo = await ritekitGateway.getCompanyLogo('www.google.com');
+    const {logo, contentType} = await ritekitGateway.getCompanyLogo(
+      'www.google.com',
+    );
 
     const imageBuffer = fs.readFileSync(imageFilename);
-    expect(companyLogo).to.deep.equal(imageBuffer);
+    expect(logo).to.deep.equal(imageBuffer);
+    expect(contentType).to.deep.equal('image/jpg');
   });
 });
