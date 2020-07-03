@@ -20,15 +20,14 @@ export class DomainLogoService {
     const existingLogo = await this.domainLogoRepository.findByDomain(domain);
 
     if (existingLogo) {
-      return {
-        logo: (await this.s3Gateway.get(existingLogo.logoUrl)) as Buffer,
-        contentType: existingLogo.contentType,
-      };
+      const {buffer, contentType} = await this.s3Gateway.get(existingLogo.logoKey);
+      return {logo: buffer, contentType: contentType};
     }
 
     const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
-    const logoUrl = await this.s3Gateway.upload(logo, `${Prefix.Logos}${domain}`);
-    const domainLogo = new DomainLogo(domain, logoUrl, contentType);
+    const key = `${Prefix.Logos}${domain}`;
+    await this.s3Gateway.upload(logo, key);
+    const domainLogo = new DomainLogo(domain, key, contentType);
     await this.domainLogoRepository.insert(domainLogo);
 
     return {logo, contentType};

@@ -28,16 +28,16 @@ describe(DomainLogoService.name, () => {
     const logoBuffer = Buffer.of();
     const domain = 'www.google.com';
     const contentType = 'image/png';
-    const s3Url = 'https://s3-url.com/';
+    const key = `logos/${domain}`;
     when(ritekitGateway.getCompanyLogo(domain)).thenResolve({
       logo: logoBuffer,
       contentType: contentType,
     });
-    when(s3Gateway.upload(logoBuffer, `logos/${domain}`)).thenResolve(s3Url);
+    when(s3Gateway.upload(logoBuffer, key)).thenResolve();
 
     const result = await domainLogoService.findLogo(domain);
 
-    const expectedDomainLogo = new DomainLogo(domain, s3Url, contentType);
+    const expectedDomainLogo = new DomainLogo(domain, key, contentType);
     verify(domainLogoRepository.insert(deepEqual(expectedDomainLogo))).once();
     expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
   });
@@ -49,7 +49,7 @@ describe(DomainLogoService.name, () => {
     const s3Url = 'https://s3-url.com/';
     const existingDomainLogo = new DomainLogo(domain, s3Url, contentType);
     when(domainLogoRepository.findByDomain(domain)).thenResolve(existingDomainLogo);
-    when(s3Gateway.get(s3Url)).thenResolve(logoBuffer);
+    when(s3Gateway.get(s3Url)).thenResolve({buffer: logoBuffer, contentType: contentType});
 
     const result = await domainLogoService.findLogo(domain);
 

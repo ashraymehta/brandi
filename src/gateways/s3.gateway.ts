@@ -12,14 +12,14 @@ export class S3Gateway {
     this.configUtil = configUtil;
   }
 
-  public async upload(buffer: Buffer, key: string): Promise<string> {
+  public async upload(buffer: Buffer, key: string): Promise<void> {
     const s3BucketName = await this.configUtil.getS3BucketName();
-    const {Location} = await this.s3.upload({Key: key, Bucket: s3BucketName, Body: buffer}).promise();
-    return Location;
+    await this.s3.upload({Key: key, Bucket: s3BucketName, Body: buffer}).promise();
   }
 
-  async get(url: string): Promise<Buffer | null> {
-    throw new Error(`Not yet implemented`);
+  async get(key: string): Promise<{buffer: Buffer; contentType: string}> {
+    const response = await this.s3.getObject({Bucket: await this.configUtil.getS3BucketName(), Key: key}).promise();
+    return {buffer: response.Body as Buffer, contentType: response.ContentType as string};
   }
 }
 
