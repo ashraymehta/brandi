@@ -16,10 +16,21 @@ export class DomainLogoService {
     this.ritekitGateway = ritekitGateway;
   }
 
-  async companyLogo(domain: string): Promise<unknown> {
+  async findLogo(domain: string): Promise<{logo: Buffer; contentType: string}> {
+    const existingLogo = await this.domainLogoRepository.findByDomain(domain);
+
+    if (existingLogo) {
+      return {
+        logo: (await this.s3Gateway.get(existingLogo.logoUrl)) as Buffer,
+        contentType: existingLogo.contentType,
+      };
+    }
+
     const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
     const logoUrl = await this.s3Gateway.upload(logo, `${Prefix.Logos}${domain}`);
-    await this.domainLogoRepository.insert(new DomainLogo(domain, logoUrl, contentType));
-    return logo;
+    const domainLogo = new DomainLogo(domain, logoUrl, contentType);
+    await this.domainLogoRepository.insert(domainLogo);
+
+    return {logo, contentType};
   }
 }

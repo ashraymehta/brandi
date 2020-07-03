@@ -12,12 +12,12 @@ export class LogoService {
     this.companyInsightsService = companyInsightsService;
   }
 
-  async getFor(brandName: string): Promise<Buffer | undefined> {
+  async getFor(brandName: string): Promise<{logo: Buffer; contentType: string} | null> {
     const url = await this.googleSearchService.findWebsite(brandName);
     if (url) {
-      return <Buffer>await this.companyInsightsService.companyLogo(url.host);
+      return await this.companyInsightsService.findLogo(url.host);
     } else {
-      return undefined;
+      return null;
     }
   }
 }

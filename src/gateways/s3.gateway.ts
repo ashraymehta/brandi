@@ -17,6 +17,10 @@ export class S3Gateway {
     const {Location} = await this.s3.upload({Key: key, Bucket: s3BucketName, Body: buffer}).promise();
     return Location;
   }
+
+  async get(url: string): Promise<Buffer | null> {
+    throw new Error(`Not yet implemented`);
+  }
 }
 
 export enum Prefix {
