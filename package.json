@@ -57,6 +57,7 @@
     "log4js": "^6.3.0",
     "mocha": "^8.0.1",
     "mongodb-memory-server": "^6.6.1",
+    "node-mocks-http": "^1.8.1",
     "nock": "^13.0.1",
     "prettier": "^2.0.5",
     "reflect-metadata": "0.1.13",

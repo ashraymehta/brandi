@@ -1,5 +1,9 @@
+import 'reflect-metadata';
+import {expect} from 'chai';
 import {LogoService} from '../../../services';
-import {instance, mock, verify} from 'ts-mockito';
+import {createResponse} from 'node-mocks-http';
+import {instance, mock, when} from 'ts-mockito';
+import {constants as HttpStatusCodes} from 'http2';
 import {LogoController} from '../../../controllers';
 
 describe(LogoController.name, () => {
@@ -8,9 +12,17 @@ describe(LogoController.name, () => {
 
   it('should invoke logo service to get logo', async function () {
     const brandName = 'a-brand-name';
+    const contentType = 'image/png';
+    const response = createResponse();
+    const logo = Buffer.of(10, 20);
+    when(logoService.getFor(brandName)).thenResolve({logo: logo, contentType: contentType});
 
-    await controller.get(brandName);
+    await controller.get(brandName, response);
 
-    verify(logoService.getFor(brandName)).once();
+    expect(response._isJSON()).to.be.false;
+    expect(response._isEndCalled()).to.be.true;
+    expect(response._getData()).to.deep.equal(logo);
+    expect(response._getHeaders()['content-type']).to.equal(contentType);
+    expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_OK);
   });
 });

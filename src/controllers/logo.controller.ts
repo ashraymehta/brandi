@@ -1,5 +1,7 @@
+import {Response} from 'express';
 import {LogoService} from '../services';
-import {controller, httpGet, queryParam} from 'inversify-express-utils';
+import {constants as HttpStatusCodes} from 'http2';
+import {controller, httpGet, queryParam, response} from 'inversify-express-utils';
 
 @controller('/logo')
 export class LogoController {
@@ -10,8 +12,12 @@ export class LogoController {
   }
 
   @httpGet('/')
-  public async get(@queryParam('brand-name') brandName: string): Promise<void> {
+  public async get(@queryParam('brand-name') brandName: string, @response() response: Response): Promise<void> {
     // TODO - Validate brand-name
-    await this.logoService.getFor(brandName);
+    const logo = await this.logoService.getFor(brandName);
+    response
+      .status(HttpStatusCodes.HTTP_STATUS_OK)
+      .contentType(logo?.contentType as string)
+      .send(logo?.logo);
   }
 }
