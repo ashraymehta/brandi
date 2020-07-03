@@ -56,6 +56,7 @@ functions:
       AWS_ACCESS_KEY_ID: ${self:custom.secrets.aws-access-key-id}
       AWS_SECRET_ACCESS_KEY: ${self:custom.secrets.aws-secret-access-key}
       AWS_S3_ENDPOINT: ${self:custom.secrets.aws-s3-endpoint}
+      AWS_S3_BUCKET_NAME: brandi-${opt:stage, self:provider.stage}
 
 resources:
   Resources:

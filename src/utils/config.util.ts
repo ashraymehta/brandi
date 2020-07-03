@@ -34,4 +34,8 @@ export class ConfigUtil {
   public async getAWSS3Endpoint(): Promise<string> {
     return process.env['AWS_S3_ENDPOINT'] as string;
   }
+
+  public async getS3BucketName(): Promise<string> {
+    return process.env['AWS_S3_BUCKET_NAME'] as string;
+  }
 }

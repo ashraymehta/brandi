@@ -1,8 +1,22 @@
+import {S3} from 'aws-sdk';
 import {injectable} from 'inversify';
+import {ConfigUtil} from '../utils/config.util';
 
 @injectable()
 export class S3Gateway {
-  async upload(buffer: Buffer): Promise<string> {
-    throw new Error(`Not implemented yet.`);
+  private readonly s3: S3;
+  private readonly configUtil: ConfigUtil;
+
+  constructor(s3: S3, configUtil: ConfigUtil) {
+    this.s3 = s3;
+    this.configUtil = configUtil;
+  }
+
+  public async upload(buffer: Buffer): Promise<string> {
+    const s3BucketName = await this.configUtil.getS3BucketName();
+    const {Location} = await this.s3
+      .upload({Key: 'not-a-great-key', Bucket: s3BucketName, Body: buffer})
+      .promise();
+    return Location;
   }
 }
