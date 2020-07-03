@@ -33,11 +33,11 @@ describe(DomainLogoService.name, () => {
       logo: logoBuffer,
       contentType: contentType,
     });
-    when(s3Gateway.upload(logoBuffer, key)).thenResolve();
+    when(s3Gateway.upload(logoBuffer, key, contentType)).thenResolve();
 
     const result = await domainLogoService.findLogo(domain);
 
-    const expectedDomainLogo = new DomainLogo(domain, key, contentType);
+    const expectedDomainLogo = new DomainLogo(domain, key);
     verify(domainLogoRepository.insert(deepEqual(expectedDomainLogo))).once();
     expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
   });
@@ -47,7 +47,7 @@ describe(DomainLogoService.name, () => {
     const domain = 'www.google.com';
     const contentType = 'image/png';
     const s3Url = 'https://s3-url.com/';
-    const existingDomainLogo = new DomainLogo(domain, s3Url, contentType);
+    const existingDomainLogo = new DomainLogo(domain, s3Url);
     when(domainLogoRepository.findByDomain(domain)).thenResolve(existingDomainLogo);
     when(s3Gateway.get(s3Url)).thenResolve({buffer: logoBuffer, contentType: contentType});
 

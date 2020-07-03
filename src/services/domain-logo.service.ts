@@ -26,8 +26,8 @@ export class DomainLogoService {
 
     const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
     const key = `${Prefix.Logos}${domain}`;
-    await this.s3Gateway.upload(logo, key);
-    const domainLogo = new DomainLogo(domain, key, contentType);
+    await this.s3Gateway.upload(logo, key, contentType);
+    const domainLogo = new DomainLogo(domain, key);
     await this.domainLogoRepository.insert(domainLogo);
 
     return {logo, contentType};

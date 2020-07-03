@@ -12,9 +12,9 @@ export class S3Gateway {
     this.configUtil = configUtil;
   }
 
-  public async upload(buffer: Buffer, key: string): Promise<void> {
+  public async upload(buffer: Buffer, key: string, contentType: string): Promise<void> {
     const s3BucketName = await this.configUtil.getS3BucketName();
-    await this.s3.upload({Key: key, Bucket: s3BucketName, Body: buffer}).promise();
+    await this.s3.upload({Key: key, Bucket: s3BucketName, Body: buffer, ContentType: contentType}).promise();
   }
 
   async get(key: string): Promise<{buffer: Buffer; contentType: string}> {

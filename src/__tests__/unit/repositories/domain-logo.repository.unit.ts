@@ -14,7 +14,7 @@ describe(DomainLogoRepository.name, () => {
 
   it('should save and retrieve domain logo to repository', async () => {
     const domain = 'www.google.com';
-    const domainLogo = new DomainLogo(domain, 'https://some-url.com/', 'image/png');
+    const domainLogo = new DomainLogo(domain, 'https://some-url.com/');
 
     await domainLogoRepository.insert(domainLogo);
     const foundDomainLogo = await domainLogoRepository.findByDomain(domain);
