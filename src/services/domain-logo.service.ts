@@ -10,27 +10,16 @@ export class DomainLogoService {
   private readonly ritekitGateway: RitekitGateway;
   private readonly domainLogoRepository: DomainLogoRepository;
 
-  constructor(
-    ritekitGateway: RitekitGateway,
-    domainLogoRepository: DomainLogoRepository,
-    s3Gateway: S3Gateway,
-  ) {
+  constructor(ritekitGateway: RitekitGateway, domainLogoRepository: DomainLogoRepository, s3Gateway: S3Gateway) {
     this.domainLogoRepository = domainLogoRepository;
     this.s3Gateway = s3Gateway;
     this.ritekitGateway = ritekitGateway;
   }
 
   async companyLogo(domain: string): Promise<unknown> {
-    const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(
-      domain,
-    );
-    const logoUrl = await this.s3Gateway.upload(
-      logo,
-      `${Prefix.Logos}${domain}`,
-    );
-    await this.domainLogoRepository.insert(
-      new DomainLogo(domain, logoUrl, contentType),
-    );
+    const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
+    const logoUrl = await this.s3Gateway.upload(logo, `${Prefix.Logos}${domain}`);
+    await this.domainLogoRepository.insert(new DomainLogo(domain, logoUrl, contentType));
     return logo;
   }
 }

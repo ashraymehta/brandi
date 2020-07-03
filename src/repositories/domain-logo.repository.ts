@@ -20,8 +20,6 @@ export class DomainLogoRepository {
   }
 
   private collection(): Collection<DomainLogo> {
-    return this.mongoClient
-      .db()
-      .collection(DomainLogoRepository.collectionName);
+    return this.mongoClient.db().collection(DomainLogoRepository.collectionName);
   }
 }

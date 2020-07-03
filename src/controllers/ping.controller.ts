@@ -1,12 +1,7 @@
 import {Request} from 'express';
 import {getLogger} from '../utils/logger.util';
 import JsonResult from 'inversify-express-utils/dts/results/JsonResult';
-import {
-  BaseHttpController,
-  controller,
-  httpGet,
-  request,
-} from 'inversify-express-utils';
+import {BaseHttpController, controller, httpGet, request} from 'inversify-express-utils';
 
 @controller('/ping')
 export class PingController extends BaseHttpController {

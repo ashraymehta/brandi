@@ -18,9 +18,7 @@ describe(S3Gateway.name, () => {
     const uploadLocation = 'https://s3.amazonaws.com/something/something/';
     const managedUpload = mock(ManagedUpload);
     when(configUtil.getS3BucketName()).thenResolve(bucketName);
-    when(
-      s3.upload(deepEqual({Body: buffer, Bucket: bucketName, Key: key})),
-    ).thenReturn(instance(managedUpload));
+    when(s3.upload(deepEqual({Body: buffer, Bucket: bucketName, Key: key}))).thenReturn(instance(managedUpload));
     when(managedUpload.promise()).thenResolve({
       Bucket: bucketName,
       Key: key,

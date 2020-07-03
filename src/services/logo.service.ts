@@ -7,10 +7,7 @@ export class LogoService {
   private readonly googleSearchService: GoogleSearchService;
   private readonly companyInsightsService: DomainLogoService;
 
-  constructor(
-    googleSearchService: GoogleSearchService,
-    companyInsightsService: DomainLogoService,
-  ) {
+  constructor(googleSearchService: GoogleSearchService, companyInsightsService: DomainLogoService) {
     this.googleSearchService = googleSearchService;
     this.companyInsightsService = companyInsightsService;
   }

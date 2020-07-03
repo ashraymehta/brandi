@@ -19,10 +19,7 @@ describe(RitekitGateway.name, () => {
     const ritekitApiKey = 'ritekit-api-key';
     when(configUtil.getRitekitApiBaseUrl()).thenResolve(baseUrl);
     when(configUtil.getRitekitApiKey()).thenResolve(ritekitApiKey);
-    const imageFilename = path.join(
-      __dirname,
-      '../../resources/random-image.jpg',
-    );
+    const imageFilename = path.join(__dirname, '../../resources/random-image.jpg');
     nock(baseUrl)
       .get('/v1/images/logo/')
       .query({
@@ -34,9 +31,7 @@ describe(RitekitGateway.name, () => {
         'Transfer-Encoding': 'chunked',
       });
 
-    const {logo, contentType} = await ritekitGateway.getCompanyLogo(
-      'www.google.com',
-    );
+    const {logo, contentType} = await ritekitGateway.getCompanyLogo('www.google.com');
 
     const imageBuffer = fs.readFileSync(imageFilename);
     expect(logo).to.deep.equal(imageBuffer);

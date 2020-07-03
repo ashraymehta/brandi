@@ -12,10 +12,7 @@ import Schema$Search = customsearch_v1.Schema$Search;
 describe(GoogleSearchService.name, function () {
   const configUtil = mock(ConfigUtil);
   const customsearch = mock(Customsearch);
-  const googleSearchService = new GoogleSearchService(
-    instance(customsearch),
-    instance(configUtil),
-  );
+  const googleSearchService = new GoogleSearchService(instance(customsearch), instance(configUtil));
 
   it('should find website for query', async function () {
     const query = 'a-query';
@@ -29,9 +26,7 @@ describe(GoogleSearchService.name, function () {
     } as GaxiosResponse<Schema$Search>;
     when(customsearch.cse).thenReturn(instance(resourceCse));
     when(configUtil.getGoogleSearchEngineId()).thenResolve(searchEngineId);
-    when(
-      resourceCse.list(deepEqual({q: query, cx: searchEngineId})),
-    ).thenResolve(searchResponse);
+    when(resourceCse.list(deepEqual({q: query, cx: searchEngineId}))).thenResolve(searchResponse);
 
     const url = await googleSearchService.findWebsite(query);
 
@@ -45,9 +40,7 @@ describe(GoogleSearchService.name, function () {
     const searchResponse = {data: {}} as GaxiosResponse<Schema$Search>;
     when(customsearch.cse).thenReturn(instance(resourceCse));
     when(configUtil.getGoogleSearchEngineId()).thenResolve(searchEngineId);
-    when(
-      resourceCse.list(deepEqual({q: query, cx: searchEngineId})),
-    ).thenResolve(searchResponse);
+    when(resourceCse.list(deepEqual({q: query, cx: searchEngineId}))).thenResolve(searchResponse);
 
     const url = await googleSearchService.findWebsite(query);
 

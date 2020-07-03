@@ -14,9 +14,7 @@ export class S3Gateway {
 
   public async upload(buffer: Buffer, key: string): Promise<string> {
     const s3BucketName = await this.configUtil.getS3BucketName();
-    const {Location} = await this.s3
-      .upload({Key: key, Bucket: s3BucketName, Body: buffer})
-      .promise();
+    const {Location} = await this.s3.upload({Key: key, Bucket: s3BucketName, Body: buffer}).promise();
     return Location;
   }
 }

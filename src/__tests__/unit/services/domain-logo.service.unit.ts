@@ -30,10 +30,6 @@ describe(DomainLogoService.name, () => {
 
     await domainLogoService.companyLogo(domain);
 
-    verify(
-      domainLogoRepository.insert(
-        deepEqual(new DomainLogo(domain, s3Url, contentType)),
-      ),
-    ).once();
+    verify(domainLogoRepository.insert(deepEqual(new DomainLogo(domain, s3Url, contentType)))).once();
   });
 });

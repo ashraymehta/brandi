@@ -11,10 +11,7 @@ export class GoogleSearchService {
   private readonly customSearch: Customsearch;
   private readonly logger = getLogger(GoogleSearchService.name);
 
-  constructor(
-    customSearch: customsearch_v1.Customsearch,
-    configUtil: ConfigUtil,
-  ) {
+  constructor(customSearch: customsearch_v1.Customsearch, configUtil: ConfigUtil) {
     this.customSearch = customSearch;
     this.configUtil = configUtil;
   }
@@ -25,8 +22,6 @@ export class GoogleSearchService {
       q: query,
       cx: await this.configUtil.getGoogleSearchEngineId(),
     });
-    return response.data.items
-      ? new URL(response.data.items[0].link as string)
-      : undefined;
+    return response.data.items ? new URL(response.data.items[0].link as string) : undefined;
   }
 }
