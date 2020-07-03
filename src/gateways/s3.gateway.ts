@@ -12,11 +12,15 @@ export class S3Gateway {
     this.configUtil = configUtil;
   }
 
-  public async upload(buffer: Buffer): Promise<string> {
+  public async upload(buffer: Buffer, key: string): Promise<string> {
     const s3BucketName = await this.configUtil.getS3BucketName();
     const {Location} = await this.s3
-      .upload({Key: 'not-a-great-key', Bucket: s3BucketName, Body: buffer})
+      .upload({Key: key, Bucket: s3BucketName, Body: buffer})
       .promise();
     return Location;
   }
+}
+
+export enum Prefix {
+  Logos = 'logos/',
 }

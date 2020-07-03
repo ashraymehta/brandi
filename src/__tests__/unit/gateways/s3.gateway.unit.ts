@@ -13,7 +13,6 @@ describe(S3Gateway.name, () => {
 
   it('should create file on S3', async () => {
     const buffer = Buffer.of();
-    // TODO - Generate key randomly
     const key = 'not-a-great-key';
     const bucketName = 'bucket-name';
     const uploadLocation = 'https://s3.amazonaws.com/something/something/';
@@ -29,7 +28,7 @@ describe(S3Gateway.name, () => {
       Location: uploadLocation,
     });
 
-    const location = await s3Gateway.upload(buffer);
+    const location = await s3Gateway.upload(buffer, key);
 
     expect(location).to.equal(uploadLocation);
   });

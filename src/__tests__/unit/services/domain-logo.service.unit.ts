@@ -26,7 +26,7 @@ describe(DomainLogoService.name, () => {
       logo: logoBuffer,
       contentType: contentType,
     });
-    when(s3Gateway.upload(logoBuffer)).thenResolve(s3Url);
+    when(s3Gateway.upload(logoBuffer, `logos/${domain}`)).thenResolve(s3Url);
 
     await domainLogoService.companyLogo(domain);
 
