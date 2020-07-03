@@ -9,7 +9,7 @@ describe(DomainLogoRepository.name, () => {
 
   beforeEach(async () => {
     const mongoClient = await setupTestDatabase();
-    domainLogoRepository = new DomainLogoRepository(mongoClient);
+    domainLogoRepository = new DomainLogoRepository(() => Promise.resolve(mongoClient));
   });
 
   it('should save and retrieve domain logo to repository', async () => {

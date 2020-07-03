@@ -72,3 +72,6 @@ config/
 
 # MacOS
 .DS_Store
+
+# S3 Storage
+s3/

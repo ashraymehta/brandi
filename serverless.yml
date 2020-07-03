@@ -28,7 +28,7 @@ custom:
   secrets: ${file(config/secrets.${opt:stage, self:provider.stage}.yml)}
   s3:
     host: localhost
-    directory: ~/s3/${opt:stage, self:provider.stage}
+    directory: s3/${opt:stage, self:provider.stage}
 
 package:
   exclude:

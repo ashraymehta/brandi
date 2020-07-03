@@ -1,25 +1,29 @@
-import {injectable} from 'inversify';
+import {inject, injectable, interfaces} from 'inversify';
 import {Collection, MongoClient} from 'mongodb';
 import {DomainLogo} from '../models/domain-logo.model';
+import Provider = interfaces.Provider;
 
 @injectable()
 export class DomainLogoRepository {
   private static readonly collectionName = 'domain-logo';
-  private readonly mongoClient: MongoClient;
+  private readonly mongoClientProvider: Provider<MongoClient>;
 
-  constructor(mongoClient: MongoClient) {
-    this.mongoClient = mongoClient;
+  constructor(@inject(MongoClient) mongoClientProvider: Provider<MongoClient>) {
+    this.mongoClientProvider = mongoClientProvider;
   }
 
   async insert(domainLogo: DomainLogo): Promise<void> {
-    await this.collection().insertOne(domainLogo);
+    const collection = await this.collection();
+    await collection.insertOne(domainLogo);
   }
 
-  findByDomain(domain: string): Promise<DomainLogo | null> {
-    return this.collection().findOne({domain: domain});
+  async findByDomain(domain: string): Promise<DomainLogo | null> {
+    const collection = await this.collection();
+    return collection.findOne({domain: domain});
   }
 
-  private collection(): Collection<DomainLogo> {
-    return this.mongoClient.db().collection(DomainLogoRepository.collectionName);
+  private async collection(): Promise<Collection<DomainLogo>> {
+    const mongoClient = (await this.mongoClientProvider()) as MongoClient;
+    return mongoClient.db().collection(DomainLogoRepository.collectionName);
   }
 }

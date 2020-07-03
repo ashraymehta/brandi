@@ -13,22 +13,20 @@ export class DependencyInjectionStep implements SetupStep {
     const container = new Container({autoBindInjectable: true});
     container.bind(Customsearch).toDynamicValue(() => google.customsearch('v1'));
 
-    container.bind(MongoClient).toProvider(() => {
-      return async () => {
-        const uri = await container.get(ConfigUtil).getMongoDbUri();
-        return MongoClient.connect(uri);
-      };
-    });
+    const configUtil = container.get(ConfigUtil);
+    const mongoDbUri = await configUtil.getMongoDbUri();
+    container.bind(MongoClient).toProvider(() => () => MongoClient.connect(mongoDbUri));
 
-    container.bind(AWS.S3).toProvider(() => {
-      return async () => {
-        const configUtil = container.get(ConfigUtil);
-        return new AWS.S3({
-          endpoint: await configUtil.getAWSS3Endpoint(),
-          accessKeyId: await configUtil.getAWSAccessKeyId(),
-          secretAccessKey: await configUtil.getAWSSecretAccessKey(),
-        });
-      };
+    const endpoint = await configUtil.getAWSS3Endpoint();
+    const accessKeyId = await configUtil.getAWSAccessKeyId();
+    const secretAccessKey = await configUtil.getAWSSecretAccessKey();
+    container.bind(AWS.S3).toDynamicValue(() => {
+      return new AWS.S3({
+        s3ForcePathStyle: true,
+        endpoint: endpoint,
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+      });
     });
 
     setupData.container = container;
