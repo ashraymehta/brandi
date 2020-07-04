@@ -26,6 +26,19 @@ describe(LogoController.name, () => {
     expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_OK);
   });
 
+  it('should result in a not-found if logo was not found', async function () {
+    const brandName = 'a-brand-name';
+    const response = createResponse();
+    when(brandService.findLogoBy(brandName)).thenResolve(undefined);
+
+    await controller.get(brandName, response);
+
+    expect(response._isJSON()).to.be.false;
+    expect(response._isEndCalled()).to.be.true;
+    expect(response._getData()).to.be.empty;
+    expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_NOT_FOUND);
+  });
+
   it('should result in a bad request if brand name is not present in query params', async function () {
     const response = createResponse();
 

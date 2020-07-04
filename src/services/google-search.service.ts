@@ -22,6 +22,13 @@ export class GoogleSearchService {
       q: query,
       cx: await this.configUtil.getGoogleSearchEngineId(),
     });
-    return response.data.items ? new URL(response.data.items[0].link as string) : undefined;
+    if (response.data.items) {
+      const url = new URL(response.data.items[0].link as string);
+      this.logger.info(`Found [${url.toString()}] as the top result for [${query}].`);
+      return url;
+    } else {
+      this.logger.info(`Could not find a website for query [${query}].`);
+      return undefined;
+    }
   }
 }

@@ -18,12 +18,18 @@ export class LogoController {
         .status(HttpStatusCodes.HTTP_STATUS_BAD_REQUEST)
         .json({errors: ['Query parameter brand-name is invalid.']})
         .end();
-    } else {
-      const logo = await this.brandService.findLogoBy(brandName);
-      response
-        .status(HttpStatusCodes.HTTP_STATUS_OK)
-        .contentType(logo?.contentType as string)
-        .send(logo?.logo);
+      return;
     }
+
+    const logo = await this.brandService.findLogoBy(brandName);
+    if (!logo) {
+      response.status(HttpStatusCodes.HTTP_STATUS_NOT_FOUND).end();
+      return;
+    }
+
+    response
+      .status(HttpStatusCodes.HTTP_STATUS_OK)
+      .contentType(logo?.contentType as string)
+      .send(logo?.logo);
   }
 }

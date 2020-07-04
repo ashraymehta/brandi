@@ -70,6 +70,15 @@ describe(BrandService.name, () => {
     verify(brandRepository.insert(deepEqual(expectedBrand))).once();
   });
 
+  it('should return undefined if not able to find domain for brand name', async () => {
+    const name = 'Google';
+    when(googleSearchService.findWebsite(name.toLowerCase())).thenResolve(undefined);
+
+    const createdBrand = await brandService.createBrandFor(name);
+
+    expect(createdBrand).to.be.undefined;
+  });
+
   it('should find logo in DomainLogoRepository', async () => {
     const logoBuffer = Buffer.of();
     const name = 'google';
@@ -115,5 +124,15 @@ describe(BrandService.name, () => {
 
     verify(spiedService.createBrandFor(name)).once();
     expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
+  });
+
+  it('should return undefined if logo was not neither found nor created', async () => {
+    const name = 'google';
+    const spiedService = spy(brandService);
+    when(spiedService.createBrandFor(name)).thenResolve(undefined);
+
+    const result = await brandService.findLogoBy(name);
+
+    expect(result).to.be.undefined;
   });
 });
