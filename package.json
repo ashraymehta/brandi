@@ -21,7 +21,7 @@
     "posttest": "npm run lint",
     "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
-    "clean": "rm -r dist *.tsbuildinfo",
+    "clean": "rm -rf dist *.tsbuildinfo",
     "presls-deploy": "npm run build",
     "sls-deploy": "serverless deploy --verbose --stage dev",
     "sls-cleanup": "serverless remove --verbose --stage dev",
