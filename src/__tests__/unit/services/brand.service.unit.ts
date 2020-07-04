@@ -30,7 +30,7 @@ describe(BrandService.name, () => {
 
   it('should create brand', async () => {
     const logoBuffer = Buffer.of();
-    const name = 'Google';
+    const name = 'google';
     const domain = 'www.google.com';
     const contentType = 'image/png';
     const key = `logos/${domain}`;
@@ -45,6 +45,27 @@ describe(BrandService.name, () => {
     const createdBrand = await brandService.createBrandFor(name);
 
     const expectedBrand = new Brand(name, domain, key);
+    expect(createdBrand).to.deep.equal(expectedBrand);
+    verify(brandRepository.insert(deepEqual(expectedBrand))).once();
+  });
+
+  it('should create brand with lower-case name', async () => {
+    const logoBuffer = Buffer.of();
+    const name = 'Google';
+    const domain = 'www.google.com';
+    const contentType = 'image/png';
+    const key = `logos/${domain}`;
+    const websiteUrl = new URL('https://www.google.com');
+    when(googleSearchService.findWebsite(name.toLowerCase())).thenResolve(websiteUrl);
+    when(ritekitGateway.getCompanyLogo(domain)).thenResolve({
+      logo: logoBuffer,
+      contentType: contentType,
+    });
+    when(s3Gateway.upload(logoBuffer, key, contentType)).thenResolve();
+
+    const createdBrand = await brandService.createBrandFor(name);
+
+    const expectedBrand = new Brand(name.toLowerCase(), domain, key);
     expect(createdBrand).to.deep.equal(expectedBrand);
     verify(brandRepository.insert(deepEqual(expectedBrand))).once();
   });

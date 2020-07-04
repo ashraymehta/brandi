@@ -38,6 +38,7 @@ export class BrandService {
   }
 
   async createBrandFor(name: string): Promise<Brand> {
+    name = name.toLowerCase();
     const url = await this.googleSearchService.findWebsite(name);
     if (!url) {
       // TODO - Handle this case
