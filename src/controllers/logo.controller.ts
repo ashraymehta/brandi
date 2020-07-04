@@ -21,7 +21,7 @@ export class LogoController {
       return;
     }
 
-    const logo = await this.brandService.findLogoBy(brandName);
+    const logo = await this.brandService.findLogoBy(brandName.trim());
     if (!logo) {
       response.status(HttpStatusCodes.HTTP_STATUS_NOT_FOUND).end();
       return;

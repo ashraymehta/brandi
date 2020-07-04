@@ -26,6 +26,23 @@ describe(LogoController.name, () => {
     expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_OK);
   });
 
+  it('should trim brand-name before querying logo service', async function () {
+    const brandName = '  a-brand-name   ';
+    const trimmedBrandName = 'a-brand-name';
+    const contentType = 'image/png';
+    const response = createResponse();
+    const logo = Buffer.of(10, 20);
+    when(brandService.findLogoBy(trimmedBrandName)).thenResolve({logo: logo, contentType: contentType});
+
+    await controller.get(brandName, response);
+
+    expect(response._isJSON()).to.be.false;
+    expect(response._isEndCalled()).to.be.true;
+    expect(response._getData()).to.deep.equal(logo);
+    expect(response._getHeaders()['content-type']).to.equal(contentType);
+    expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_OK);
+  });
+
   it('should result in a not-found if logo was not found', async function () {
     const brandName = 'a-brand-name';
     const response = createResponse();
