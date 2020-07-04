@@ -11,6 +11,6 @@ export class LogoService {
   }
 
   async getFor(brandName: string): Promise<{logo: Buffer; contentType: string} | null> {
-    return await this.brandService.findLogo(brandName);
+    return await this.brandService.findLogoBy(brandName);
   }
 }

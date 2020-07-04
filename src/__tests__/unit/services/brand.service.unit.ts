@@ -42,7 +42,7 @@ describe(BrandService.name, () => {
     });
     when(s3Gateway.upload(logoBuffer, key, contentType)).thenResolve();
 
-    const createdBrand = await brandService.create(name);
+    const createdBrand = await brandService.createBrandFor(name);
 
     const expectedBrand = new Brand(name, domain, key);
     expect(createdBrand).to.deep.equal(expectedBrand);
@@ -59,7 +59,7 @@ describe(BrandService.name, () => {
     when(brandRepository.findByName(name)).thenResolve(existingBrand);
     when(s3Gateway.get(key)).thenResolve({buffer: logoBuffer, contentType: contentType});
 
-    const result = await brandService.findLogo(name);
+    const result = await brandService.findLogoBy(name);
 
     verify(ritekitGateway.getCompanyLogo(anything())).never();
     verify(googleSearchService.findWebsite(anything())).never();
@@ -74,12 +74,12 @@ describe(BrandService.name, () => {
     const key = 'image-for-google';
     const createdBrand = new Brand(name, domain, key);
     const spiedService = spy(brandService);
-    when(spiedService.create(name)).thenResolve(createdBrand);
+    when(spiedService.createBrandFor(name)).thenResolve(createdBrand);
     when(s3Gateway.get(key)).thenResolve({buffer: logoBuffer, contentType: contentType});
 
-    const result = await brandService.findLogo(name);
+    const result = await brandService.findLogoBy(name);
 
-    verify(spiedService.create(name)).once();
+    verify(spiedService.createBrandFor(name)).once();
     expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
   });
 });

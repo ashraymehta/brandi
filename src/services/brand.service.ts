@@ -24,21 +24,22 @@ export class BrandService {
     this.ritekitGateway = ritekitGateway;
   }
 
-  async findLogo(name: string): Promise<{logo: Buffer; contentType: string}> {
+  async findLogoBy(name: string): Promise<{logo: Buffer; contentType: string}> {
     const existingBrand = await this.brandRepository.findByName(name);
     if (existingBrand) {
       const {buffer, contentType} = await this.s3Gateway.get(existingBrand.logoKey);
       return {logo: buffer, contentType: contentType};
     }
 
-    const brand = await this.create(name);
+    const brand = await this.createBrandFor(name);
     const {buffer, contentType} = await this.s3Gateway.get(brand.logoKey);
     return {logo: buffer, contentType: contentType};
   }
 
-  async create(name: string): Promise<Brand> {
+  async createBrandFor(name: string): Promise<Brand> {
     const url = await this.googleSearchService.findWebsite(name);
     if (!url) {
+      // TODO - Handle this case
       throw new Error(`Not implemented yet.`);
     }
     const domain = url.host;

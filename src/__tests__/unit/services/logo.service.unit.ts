@@ -10,7 +10,7 @@ describe(LogoService.name, function () {
   it('should get logo for brand name', async function () {
     const logo = Buffer.of();
     const brandName = 'reddit';
-    when(brandService.findLogo(brandName)).thenResolve({logo, contentType: 'image/png'});
+    when(brandService.findLogoBy(brandName)).thenResolve({logo, contentType: 'image/png'});
 
     const result = await logoService.getFor(brandName);
 
