@@ -1,8 +1,8 @@
 import {injectable} from 'inversify';
-import {GoogleSearchService} from '.';
 import {Brand} from '../models/brand.model';
 import {Prefix, S3Gateway} from '../gateways/s3.gateway';
 import {RitekitGateway} from '../gateways/ritekit.gateway';
+import {GoogleSearchService} from './google-search.service';
 import {BrandRepository} from '../repositories/brand.repository';
 
 @injectable()

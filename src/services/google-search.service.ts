@@ -11,7 +11,7 @@ export class GoogleSearchService {
   private readonly customSearch: Customsearch;
   private readonly logger = getLogger(GoogleSearchService.name);
 
-  constructor(customSearch: customsearch_v1.Customsearch, configUtil: ConfigUtil) {
+  constructor(customSearch: Customsearch, configUtil: ConfigUtil) {
     this.customSearch = customSearch;
     this.configUtil = configUtil;
   }
