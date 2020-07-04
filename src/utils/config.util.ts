@@ -23,16 +23,16 @@ export class ConfigUtil {
     return process.env['RITEKIT_API_BASE_URL'] as string;
   }
 
-  public async getAWSAccessKeyId(): Promise<string | undefined> {
-    return process.env['AWS_ACCESS_KEY_ID'];
+  public async getOverriddenAWSAccessKeyId(): Promise<string | undefined> {
+    return process.env['X_AWS_ACCESS_KEY_ID'];
   }
 
-  public async getAWSSecretAccessKey(): Promise<string | undefined> {
-    return process.env['AWS_SECRET_ACCESS_KEY'];
+  public async getOverriddenAWSSecretAccessKey(): Promise<string | undefined> {
+    return process.env['X_AWS_SECRET_ACCESS_KEY'];
   }
 
   public async getAWSS3Endpoint(): Promise<string> {
-    return process.env['AWS_S3_ENDPOINT'] as string;
+    return process.env['X_AWS_S3_ENDPOINT'] as string;
   }
 
   public async getS3BucketName(): Promise<string> {
