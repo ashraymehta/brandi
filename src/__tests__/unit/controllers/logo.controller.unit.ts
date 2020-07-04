@@ -1,21 +1,21 @@
 import 'reflect-metadata';
 import {expect} from 'chai';
-import {LogoService} from '../../../services';
+import {BrandService} from '../../../services';
 import {createResponse} from 'node-mocks-http';
 import {instance, mock, when} from 'ts-mockito';
 import {constants as HttpStatusCodes} from 'http2';
 import {LogoController} from '../../../controllers';
 
 describe(LogoController.name, () => {
-  const logoService = mock(LogoService);
-  const controller = new LogoController(instance(logoService));
+  const brandService = mock(BrandService);
+  const controller = new LogoController(instance(brandService));
 
   it('should invoke logo service to get logo', async function () {
     const brandName = 'a-brand-name';
     const contentType = 'image/png';
     const response = createResponse();
     const logo = Buffer.of(10, 20);
-    when(logoService.getFor(brandName)).thenResolve({logo: logo, contentType: contentType});
+    when(brandService.findLogoBy(brandName)).thenResolve({logo: logo, contentType: contentType});
 
     await controller.get(brandName, response);
 

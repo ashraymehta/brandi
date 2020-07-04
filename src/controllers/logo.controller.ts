@@ -1,20 +1,20 @@
 import {Response} from 'express';
-import {LogoService} from '../services';
+import {BrandService} from '../services';
 import {constants as HttpStatusCodes} from 'http2';
 import {controller, httpGet, queryParam, response} from 'inversify-express-utils';
 
 @controller('/logo')
 export class LogoController {
-  private readonly logoService: LogoService;
+  private readonly brandService: BrandService;
 
-  constructor(logoService: LogoService) {
-    this.logoService = logoService;
+  constructor(brandService: BrandService) {
+    this.brandService = brandService;
   }
 
   @httpGet('/')
   public async get(@queryParam('brand-name') brandName: string, @response() response: Response): Promise<void> {
     // TODO - Validate brand-name
-    const logo = await this.logoService.getFor(brandName);
+    const logo = await this.brandService.findLogoBy(brandName);
     response
       .status(HttpStatusCodes.HTTP_STATUS_OK)
       .contentType(logo?.contentType as string)
