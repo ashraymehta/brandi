@@ -56,14 +56,13 @@ describe(BrandService.name, () => {
     const contentType = 'image/png';
     const s3Url = 'https://s3-url.com/';
     const existingDomainLogo = new Brand(name, domain, s3Url);
-    const websiteUrl = new URL('https://www.google.com');
-    when(googleSearchService.findWebsite(name)).thenResolve(websiteUrl);
-    when(domainLogoRepository.findByName(domain)).thenResolve(existingDomainLogo);
+    when(domainLogoRepository.findByName(name)).thenResolve(existingDomainLogo);
     when(s3Gateway.get(s3Url)).thenResolve({buffer: logoBuffer, contentType: contentType});
 
     const result = await domainLogoService.findLogo(name);
 
     verify(ritekitGateway.getCompanyLogo(anything())).never();
+    verify(googleSearchService.findWebsite(anything())).never();
     expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
   });
 });

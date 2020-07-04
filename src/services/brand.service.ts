@@ -25,17 +25,17 @@ export class BrandService {
   }
 
   async findLogo(name: string): Promise<{logo: Buffer; contentType: string}> {
+    const existingLogo = await this.brandRepository.findByName(name);
+    if (existingLogo) {
+      const {buffer, contentType} = await this.s3Gateway.get(existingLogo.logoKey);
+      return {logo: buffer, contentType: contentType};
+    }
+
     const url = await this.googleSearchService.findWebsite(name);
     if (!url) {
       throw new Error(`Not implemented yet.`);
     }
     const domain = url.host;
-    const existingLogo = await this.brandRepository.findByName(domain);
-
-    if (existingLogo) {
-      const {buffer, contentType} = await this.s3Gateway.get(existingLogo.logoKey);
-      return {logo: buffer, contentType: contentType};
-    }
 
     const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
     const key = `${Prefix.Logos}${domain}`;
