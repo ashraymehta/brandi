@@ -13,11 +13,17 @@ export class LogoController {
 
   @httpGet('/')
   public async get(@queryParam('brand-name') brandName: string, @response() response: Response): Promise<void> {
-    // TODO - Validate brand-name
-    const logo = await this.brandService.findLogoBy(brandName);
-    response
-      .status(HttpStatusCodes.HTTP_STATUS_OK)
-      .contentType(logo?.contentType as string)
-      .send(logo?.logo);
+    if (!brandName || brandName.length > 50) {
+      response
+        .status(HttpStatusCodes.HTTP_STATUS_BAD_REQUEST)
+        .json({errors: ['Query parameter brand-name is invalid.']})
+        .end();
+    } else {
+      const logo = await this.brandService.findLogoBy(brandName);
+      response
+        .status(HttpStatusCodes.HTTP_STATUS_OK)
+        .contentType(logo?.contentType as string)
+        .send(logo?.logo);
+    }
   }
 }

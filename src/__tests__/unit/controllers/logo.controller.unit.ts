@@ -25,4 +25,41 @@ describe(LogoController.name, () => {
     expect(response._getHeaders()['content-type']).to.equal(contentType);
     expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_OK);
   });
+
+  it('should result in a bad request if brand name is not present in query params', async function () {
+    const response = createResponse();
+
+    await controller.get(<any>undefined, response);
+
+    expect(response._isJSON()).to.be.true;
+    expect(response._isEndCalled()).to.be.true;
+    expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_BAD_REQUEST);
+    expect(response._getJSONData()).to.deep.equal({errors: ['Query parameter brand-name is invalid.']});
+  });
+
+  it('should result in a bad request if brand name is longer than 50 characters', async function () {
+    const response = createResponse();
+
+    await controller.get('123456789012345678901234567890123456789012345678901', response);
+
+    expect(response._isJSON()).to.be.true;
+    expect(response._isEndCalled()).to.be.true;
+    expect(response._getStatusCode()).to.equal(HttpStatusCodes.HTTP_STATUS_BAD_REQUEST);
+    expect(response._getJSONData()).to.deep.equal({errors: ['Query parameter brand-name is invalid.']});
+  });
+
+  it('should result in a bad request if brand name is 50 characters long', async function () {
+    const brandName = 'a-brand-name';
+    const contentType = 'image/png';
+    const response = createResponse();
+    when(brandService.findLogoBy('12345678901234567890123456789012345678901234567890')).thenResolve({
+      logo: Buffer.of(10, 20),
+      contentType: contentType,
+    });
+
+    await controller.get(brandName, response);
+
+    expect(response._isEndCalled()).to.be.true;
+    expect(response._getStatusCode()).to.not.equal(HttpStatusCodes.HTTP_STATUS_BAD_REQUEST);
+  });
 });
