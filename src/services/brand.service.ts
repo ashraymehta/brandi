@@ -9,17 +9,17 @@ import {BrandRepository} from '../repositories/brand.repository';
 export class BrandService {
   private readonly s3Gateway: S3Gateway;
   private readonly ritekitGateway: RitekitGateway;
-  private readonly domainLogoRepository: BrandRepository;
+  private readonly brandRepository: BrandRepository;
   private readonly googleSearchService: GoogleSearchService;
 
   constructor(
     googleSearchService: GoogleSearchService,
     ritekitGateway: RitekitGateway,
-    domainLogoRepository: BrandRepository,
+    brandRepository: BrandRepository,
     s3Gateway: S3Gateway,
   ) {
     this.googleSearchService = googleSearchService;
-    this.domainLogoRepository = domainLogoRepository;
+    this.brandRepository = brandRepository;
     this.s3Gateway = s3Gateway;
     this.ritekitGateway = ritekitGateway;
   }
@@ -30,7 +30,7 @@ export class BrandService {
       throw new Error(`Not implemented yet.`);
     }
     const domain = url.host;
-    const existingLogo = await this.domainLogoRepository.findByDomain(domain);
+    const existingLogo = await this.brandRepository.findByName(domain);
 
     if (existingLogo) {
       const {buffer, contentType} = await this.s3Gateway.get(existingLogo.logoKey);
@@ -40,8 +40,8 @@ export class BrandService {
     const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
     const key = `${Prefix.Logos}${domain}`;
     await this.s3Gateway.upload(logo, key, contentType);
-    const domainLogo = new Brand(domain, key);
-    await this.domainLogoRepository.insert(domainLogo);
+    const domainLogo = new Brand(name, domain, key);
+    await this.brandRepository.insert(domainLogo);
 
     return {logo, contentType};
   }

@@ -44,7 +44,7 @@ describe(BrandService.name, () => {
 
     const result = await domainLogoService.findLogo(name);
 
-    const expectedDomainLogo = new Brand(domain, key);
+    const expectedDomainLogo = new Brand(name, domain, key);
     verify(domainLogoRepository.insert(deepEqual(expectedDomainLogo))).once();
     expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
   });
@@ -55,10 +55,10 @@ describe(BrandService.name, () => {
     const domain = 'www.google.com';
     const contentType = 'image/png';
     const s3Url = 'https://s3-url.com/';
-    const existingDomainLogo = new Brand(domain, s3Url);
+    const existingDomainLogo = new Brand(name, domain, s3Url);
     const websiteUrl = new URL('https://www.google.com');
     when(googleSearchService.findWebsite(name)).thenResolve(websiteUrl);
-    when(domainLogoRepository.findByDomain(domain)).thenResolve(existingDomainLogo);
+    when(domainLogoRepository.findByName(domain)).thenResolve(existingDomainLogo);
     when(s3Gateway.get(s3Url)).thenResolve({buffer: logoBuffer, contentType: contentType});
 
     const result = await domainLogoService.findLogo(name);

@@ -17,9 +17,9 @@ export class BrandRepository {
     await collection.insertOne(domainLogo);
   }
 
-  async findByDomain(domain: string): Promise<Brand | null> {
+  async findByName(name: string): Promise<Brand | null> {
     const collection = await this.collection();
-    return collection.findOne({domain: domain});
+    return collection.findOne({name: name});
   }
 
   private async collection(): Promise<Collection<Brand>> {
