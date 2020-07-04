@@ -1,21 +1,21 @@
 import {injectable} from 'inversify';
-import {DomainLogoService} from './domain-logo.service';
+import {BrandService} from './brand.service';
 import {GoogleSearchService} from './google-search.service';
 
 @injectable()
 export class LogoService {
   private readonly googleSearchService: GoogleSearchService;
-  private readonly companyInsightsService: DomainLogoService;
+  private readonly brandService: BrandService;
 
-  constructor(googleSearchService: GoogleSearchService, companyInsightsService: DomainLogoService) {
+  constructor(brandService: BrandService, googleSearchService: GoogleSearchService) {
     this.googleSearchService = googleSearchService;
-    this.companyInsightsService = companyInsightsService;
+    this.brandService = brandService;
   }
 
   async getFor(brandName: string): Promise<{logo: Buffer; contentType: string} | null> {
     const url = await this.googleSearchService.findWebsite(brandName);
     if (url) {
-      return await this.companyInsightsService.findLogo(url.host);
+      return await this.brandService.findLogo(url.host);
     } else {
       return null;
     }

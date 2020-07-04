@@ -1,22 +1,35 @@
 import {injectable} from 'inversify';
+import {GoogleSearchService} from '.';
+import {Brand} from '../models/brand.model';
 import {Prefix, S3Gateway} from '../gateways/s3.gateway';
-import {DomainLogo} from '../models/domain-logo.model';
 import {RitekitGateway} from '../gateways/ritekit.gateway';
-import {DomainLogoRepository} from '../repositories/domain-logo.repository';
+import {BrandRepository} from '../repositories/brand.repository';
 
 @injectable()
-export class DomainLogoService {
+export class BrandService {
   private readonly s3Gateway: S3Gateway;
   private readonly ritekitGateway: RitekitGateway;
-  private readonly domainLogoRepository: DomainLogoRepository;
+  private readonly domainLogoRepository: BrandRepository;
+  private readonly googleSearchService: GoogleSearchService;
 
-  constructor(ritekitGateway: RitekitGateway, domainLogoRepository: DomainLogoRepository, s3Gateway: S3Gateway) {
+  constructor(
+    googleSearchService: GoogleSearchService,
+    ritekitGateway: RitekitGateway,
+    domainLogoRepository: BrandRepository,
+    s3Gateway: S3Gateway,
+  ) {
+    this.googleSearchService = googleSearchService;
     this.domainLogoRepository = domainLogoRepository;
     this.s3Gateway = s3Gateway;
     this.ritekitGateway = ritekitGateway;
   }
 
-  async findLogo(domain: string): Promise<{logo: Buffer; contentType: string}> {
+  async findLogo(name: string): Promise<{logo: Buffer; contentType: string}> {
+    const url = await this.googleSearchService.findWebsite(name);
+    if (!url) {
+      throw new Error(`Not implemented yet.`);
+    }
+    const domain = url.host;
     const existingLogo = await this.domainLogoRepository.findByDomain(domain);
 
     if (existingLogo) {
@@ -27,7 +40,7 @@ export class DomainLogoService {
     const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
     const key = `${Prefix.Logos}${domain}`;
     await this.s3Gateway.upload(logo, key, contentType);
-    const domainLogo = new DomainLogo(domain, key);
+    const domainLogo = new Brand(domain, key);
     await this.domainLogoRepository.insert(domainLogo);
 
     return {logo, contentType};

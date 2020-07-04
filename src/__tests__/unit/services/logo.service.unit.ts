@@ -2,12 +2,12 @@ import 'reflect-metadata';
 import {URL} from 'url';
 import {expect} from 'chai';
 import {instance, mock, when} from 'ts-mockito';
-import {DomainLogoService, GoogleSearchService, LogoService} from '../../../services';
+import {BrandService, GoogleSearchService, LogoService} from '../../../services';
 
 describe(LogoService.name, function () {
-  const domainLogoService = mock<DomainLogoService>();
+  const brandService = mock<BrandService>();
   const googleSearchService = mock<GoogleSearchService>();
-  const logoService = new LogoService(instance(googleSearchService), instance(domainLogoService));
+  const logoService = new LogoService(instance(brandService), instance(googleSearchService));
 
   it('should get logo for brand name', async function () {
     const logo = Buffer.of();
@@ -15,7 +15,7 @@ describe(LogoService.name, function () {
     const domain = 'reddit.com';
     const url = new URL('https://reddit.com');
     when(googleSearchService.findWebsite(brandName)).thenResolve(url);
-    when(domainLogoService.findLogo(domain)).thenResolve({logo, contentType: 'image/png'});
+    when(brandService.findLogo(domain)).thenResolve({logo, contentType: 'image/png'});
 
     const result = await logoService.getFor(brandName);
 

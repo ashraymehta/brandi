@@ -1,20 +1,20 @@
 import 'reflect-metadata';
 import {expect} from 'chai';
-import {DomainLogo} from '../../../models/domain-logo.model';
+import {Brand} from '../../../models/brand.model';
 import {setupTestDatabase} from '../../acceptance/test-helper';
-import {DomainLogoRepository} from '../../../repositories/domain-logo.repository';
+import {BrandRepository} from '../../../repositories/brand.repository';
 
-describe(DomainLogoRepository.name, () => {
-  let domainLogoRepository: DomainLogoRepository;
+describe(BrandRepository.name, () => {
+  let domainLogoRepository: BrandRepository;
 
   beforeEach(async () => {
     const mongoClient = await setupTestDatabase();
-    domainLogoRepository = new DomainLogoRepository(() => Promise.resolve(mongoClient));
+    domainLogoRepository = new BrandRepository(() => Promise.resolve(mongoClient));
   });
 
-  it('should save and retrieve domain logo to repository', async () => {
+  it('should save and retrieve brand to repository', async () => {
     const domain = 'www.google.com';
-    const domainLogo = new DomainLogo(domain, 'https://some-url.com/');
+    const domainLogo = new Brand(domain, 'https://some-url.com/');
 
     await domainLogoRepository.insert(domainLogo);
     const foundDomainLogo = await domainLogoRepository.findByDomain(domain);

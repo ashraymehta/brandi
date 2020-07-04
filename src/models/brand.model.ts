@@ -1,4 +1,4 @@
-export class DomainLogo {
+export class Brand {
   public readonly domain: string;
   public readonly logoKey: string;
 
