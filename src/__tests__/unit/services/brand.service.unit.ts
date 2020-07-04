@@ -6,7 +6,7 @@ import {S3Gateway} from '../../../gateways/s3.gateway';
 import {RitekitGateway} from '../../../gateways/ritekit.gateway';
 import {BrandService, GoogleSearchService} from '../../../services';
 import {BrandRepository} from '../../../repositories/brand.repository';
-import {anything, deepEqual, instance, mock, verify, when, spy} from 'ts-mockito';
+import {deepEqual, instance, mock, spy, verify, when} from 'ts-mockito';
 
 describe(BrandService.name, () => {
   let s3Gateway: S3Gateway;
@@ -51,7 +51,7 @@ describe(BrandService.name, () => {
 
   it('should find logo in DomainLogoRepository', async () => {
     const logoBuffer = Buffer.of();
-    const name = 'Google';
+    const name = 'google';
     const domain = 'www.google.com';
     const contentType = 'image/png';
     const key = 'image-for-google';
@@ -61,14 +61,27 @@ describe(BrandService.name, () => {
 
     const result = await brandService.findLogoBy(name);
 
-    verify(ritekitGateway.getCompanyLogo(anything())).never();
-    verify(googleSearchService.findWebsite(anything())).never();
+    expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
+  });
+
+  it('should convert name to lowercase before searching in DomainLogoRepository', async () => {
+    const logoBuffer = Buffer.of();
+    const name = 'Google';
+    const domain = 'www.google.com';
+    const contentType = 'image/png';
+    const key = 'image-for-google';
+    const existingBrand = new Brand(name.toLowerCase(), domain, key);
+    when(brandRepository.findByName(name.toLowerCase())).thenResolve(existingBrand);
+    when(s3Gateway.get(key)).thenResolve({buffer: logoBuffer, contentType: contentType});
+
+    const result = await brandService.findLogoBy(name);
+
     expect(result).to.deep.equal({logo: logoBuffer, contentType: contentType});
   });
 
   it('should create logo if not found', async () => {
     const logoBuffer = Buffer.of();
-    const name = 'Google';
+    const name = 'google';
     const domain = 'www.google.com';
     const contentType = 'image/png';
     const key = 'image-for-google';

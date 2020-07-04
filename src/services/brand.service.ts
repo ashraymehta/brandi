@@ -25,6 +25,7 @@ export class BrandService {
   }
 
   async findLogoBy(name: string): Promise<{logo: Buffer; contentType: string}> {
+    name = name.toLowerCase();
     const existingBrand = await this.brandRepository.findByName(name);
     if (existingBrand) {
       const {buffer, contentType} = await this.s3Gateway.get(existingBrand.logoKey);
