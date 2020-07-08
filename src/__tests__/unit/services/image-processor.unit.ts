@@ -21,10 +21,13 @@ describe(ImageProcessor.name, () => {
   it('should invoke remove.bg gateway if image is opaque', async () => {
     const imageWithRemovedBackground = Buffer.of(12, 32);
     const opaqueImage = fs.readFileSync(path.join(__dirname, '../../resources/opaque-image.jpg'));
-    when(removeBgGateway.removeBackground(opaqueImage)).thenResolve(imageWithRemovedBackground);
+    when(removeBgGateway.removeBackground(opaqueImage)).thenResolve({
+      image: imageWithRemovedBackground,
+      contentType: 'image/png',
+    });
 
     const processedImage = await imageProcessor.process(opaqueImage);
 
-    expect(processedImage).to.equal(imageWithRemovedBackground);
+    expect(processedImage).to.deep.equal({image: imageWithRemovedBackground, contentType: 'image/png'});
   });
 });

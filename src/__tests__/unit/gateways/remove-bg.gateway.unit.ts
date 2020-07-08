@@ -18,12 +18,18 @@ describe(RemoveBgGateway.name, () => {
     const opaqueImageAsBase64 = opaqueImage.toString('base64');
     const transparentImage = fs.readFileSync(path.join(__dirname, '../../resources/transparent-image.png'));
     const spiedGateway = spy(removeBgGateway);
-    when(spiedGateway._removeBackground(deepEqual({apiKey, base64img: opaqueImageAsBase64}))).thenResolve({
-      base64img: transparentImage.toString('base64'),
-    } as RemoveBgResult);
+    when(
+      spiedGateway._removeBackground(
+        deepEqual({
+          apiKey,
+          base64img: opaqueImageAsBase64,
+          format: 'png',
+        }),
+      ),
+    ).thenResolve({base64img: transparentImage.toString('base64')} as RemoveBgResult);
 
     const result = await removeBgGateway.removeBackground(opaqueImage);
 
-    expect(result).to.deep.equal(transparentImage);
+    expect(result).to.deep.equal({image: transparentImage, contentType: 'image/png'});
   });
 });

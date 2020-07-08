@@ -10,12 +10,13 @@ export class RemoveBgGateway {
     this.configUtil = configUtil;
   }
 
-  async removeBackground(image: Buffer): Promise<Buffer> {
+  async removeBackground(image: Buffer): Promise<{image: Buffer; contentType: string}> {
     const removeBgResult = await this._removeBackground({
+      format: 'png',
       base64img: image.toString('base64'),
       apiKey: await this.configUtil.getRemoveBgApiKey(),
     });
-    return Buffer.from(removeBgResult.base64img, 'base64');
+    return {image: Buffer.from(removeBgResult.base64img, 'base64'), contentType: 'image/png'};
   }
 
   async _removeBackground(removeBgBase64Options: RemoveBgBase64Options): Promise<RemoveBgResult> {
