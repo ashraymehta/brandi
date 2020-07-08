@@ -11,11 +11,11 @@ describe(ImageProcessor.name, () => {
   const imageProcessor = new ImageProcessor(instance(removeBgGateway));
 
   it('should return the image if it is not opaque', async () => {
-    const opaqueImage = fs.readFileSync(path.join(__dirname, '../../resources/transparent-image.png'));
+    const transparentImage = fs.readFileSync(path.join(__dirname, '../../resources/transparent-image.png'));
 
-    const processedImage = await imageProcessor.process(opaqueImage);
+    const processedImage = await imageProcessor.process(transparentImage, 'image/png');
 
-    expect(processedImage).to.equal(opaqueImage);
+    expect(processedImage).to.deep.equal({image: transparentImage, contentType: 'image/png'});
   });
 
   it('should invoke remove.bg gateway if image is opaque', async () => {
@@ -26,7 +26,7 @@ describe(ImageProcessor.name, () => {
       contentType: 'image/png',
     });
 
-    const processedImage = await imageProcessor.process(opaqueImage);
+    const processedImage = await imageProcessor.process(opaqueImage, 'image/jpeg');
 
     expect(processedImage).to.deep.equal({image: imageWithRemovedBackground, contentType: 'image/png'});
   });

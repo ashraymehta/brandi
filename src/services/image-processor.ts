@@ -10,9 +10,9 @@ export class ImageProcessor {
     this.removeBgGateway = removeBgGateway;
   }
 
-  public async process(buffer: Buffer) {
+  public async process(buffer: Buffer, contentType: string): Promise<{image: Buffer; contentType: string}> {
     const stats = await sharp(buffer).stats();
-    if (!stats.isOpaque) return buffer;
+    if (!stats.isOpaque) return {image: buffer, contentType};
     return await this.removeBgGateway.removeBackground(buffer);
   }
 }
