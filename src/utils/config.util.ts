@@ -40,6 +40,6 @@ export class ConfigUtil {
   }
 
   public async getRemoveBgApiKey(): Promise<string> {
-    throw new Error(`Not implemented yet.`);
+    return process.env['REMOVE_BG_API_KEY'] as string;
   }
 }
