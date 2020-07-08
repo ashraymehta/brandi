@@ -38,4 +38,8 @@ export class ConfigUtil {
   public async getS3BucketName(): Promise<string> {
     return process.env['AWS_S3_BUCKET_NAME'] as string;
   }
+
+  public async getRemoveBgApiKey(): Promise<string> {
+    throw new Error(`Not implemented yet.`);
+  }
 }
