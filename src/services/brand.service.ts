@@ -1,6 +1,7 @@
 import {injectable} from 'inversify';
 import {Brand} from '../models/brand.model';
 import {getLogger} from '../utils/logger.util';
+import {ImageProcessor} from './image-processor';
 import {Prefix, S3Gateway} from '../gateways/s3.gateway';
 import {RitekitGateway} from '../gateways/ritekit.gateway';
 import {GoogleSearchService} from './google-search.service';
@@ -10,6 +11,7 @@ import {BrandRepository} from '../repositories/brand.repository';
 export class BrandService {
   private readonly s3Gateway: S3Gateway;
   private readonly ritekitGateway: RitekitGateway;
+  private readonly imageProcessor: ImageProcessor;
   private readonly brandRepository: BrandRepository;
   private readonly googleSearchService: GoogleSearchService;
   private readonly logger = getLogger(BrandService.name);
@@ -19,11 +21,13 @@ export class BrandService {
     ritekitGateway: RitekitGateway,
     brandRepository: BrandRepository,
     s3Gateway: S3Gateway,
+    imageProcessor: ImageProcessor,
   ) {
     this.googleSearchService = googleSearchService;
     this.brandRepository = brandRepository;
     this.s3Gateway = s3Gateway;
     this.ritekitGateway = ritekitGateway;
+    this.imageProcessor = imageProcessor;
   }
 
   async findLogoBy(name: string): Promise<{logo: Buffer; contentType: string} | undefined> {
@@ -50,15 +54,25 @@ export class BrandService {
     if (!url) return undefined;
 
     const domain = url.host;
-    const {logo, contentType} = await this.ritekitGateway.getCompanyLogo(domain);
+    const {image, contentType} = await this.getLogo(domain);
 
     const key = `${Prefix.Logos}${domain}`;
-    await this.s3Gateway.upload(logo, key, contentType);
+    await this.s3Gateway.upload(image, key, contentType);
 
     const brand = new Brand(name, domain, key);
     await this.brandRepository.insert(brand);
 
     this.logger.info(`Saved brand information for brand-name [${name}].`);
     return brand;
+  }
+
+  private async getLogo(domain: string): Promise<{image: Buffer; contentType: string}> {
+    const companyLogo = await this.ritekitGateway.getCompanyLogo(domain);
+    this.logger.info(`Got logo for [${domain}] from ritekit.`);
+
+    const {image, contentType} = await this.imageProcessor.process(companyLogo.logo, companyLogo.contentType);
+    this.logger.info(`Processed logo for [${domain}].`);
+
+    return {image, contentType: contentType};
   }
 }
