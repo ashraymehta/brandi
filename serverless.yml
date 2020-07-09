@@ -4,6 +4,7 @@ service: brandi
 frameWorkVersion: ">=1.72.0 <2.0.0"
 
 plugins:
+  - serverless-webpack
   - serverless-offline
   - serverless-s3-local
   - serverless-dotenv-plugin
@@ -52,6 +53,14 @@ custom:
     directory: s3/${self:provider.stage}
   dotenv:
     basePath: ./config/
+  webpack:
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packagerOptions:
+      scripts:
+        - npm uninstall sharp
+        - npm install --arch=x64 --platform=linux sharp
 
 package:
   exclude:
