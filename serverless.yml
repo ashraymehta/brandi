@@ -21,21 +21,17 @@ provider:
     httpApi: true
   iamRoleStatements:
     - Effect: "Allow"
-      Action: ["s3:ListBucket"]
+      Action:
+        - "s3:ListBucket"
       Resource:
-        Fn::GetAtt:
-          - S3Bucket
-          - Arn
+        - arn:aws:s3:::${env:AWS_S3_BUCKET_NAME}
     - Effect: "Allow"
-      Action: [
-        "s3:PutObject",
-        "s3:GetObject",
-        "s3:DeleteObject"
-      ]
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+        - "s3:DeleteObject"
       Resource:
-        Fn::GetAtt:
-          - S3Bucket
-          - Arn
+        - arn:aws:s3:::${env:AWS_S3_BUCKET_NAME}/*
 
 custom:
   default-stage: local
