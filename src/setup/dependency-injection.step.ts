@@ -6,7 +6,9 @@ import {getLogger} from '../utils/logger.util';
 import {ConfigUtil} from '../utils/config.util';
 import {SetupData, SetupStep} from './setup.step';
 import {customsearch_v1, google} from 'googleapis';
+import {OAuth2Client} from 'google-auth-library';
 import {ClientConfiguration} from 'aws-sdk/clients/s3';
+import {GoogleSignInTokenVerifier} from '../controllers/authentication/google-sign-in-verifier';
 import AWS = require('aws-sdk');
 import Customsearch = customsearch_v1.Customsearch;
 
@@ -20,6 +22,12 @@ export class DependencyInjectionStep implements SetupStep {
     const configUtil = container.get(ConfigUtil);
     const mongoDbUri = await configUtil.getMongoDbUri();
     container.bind(MongoClient).toProvider(() => () => MongoClient.connect(mongoDbUri));
+
+    const googleSignInClientId = await configUtil.getGoogleSignInClientId();
+    const googleServerClientId = await configUtil.getGoogleServerClientId();
+    container
+      .bind(GoogleSignInTokenVerifier)
+      .toDynamicValue(() => new GoogleSignInTokenVerifier(googleServerClientId, new OAuth2Client(googleSignInClientId)));
 
     await this.configureS3(configUtil, container);
 

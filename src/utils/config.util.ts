@@ -42,4 +42,12 @@ export class ConfigUtil {
   public async getRemoveBgApiKey(): Promise<string> {
     return process.env['REMOVE_BG_API_KEY'] as string;
   }
+
+  public async getGoogleSignInClientId(): Promise<string> {
+    return process.env['GOOGLE_SIGN_IN_CLIENT_ID'] as string;
+  }
+
+  public async getGoogleServerClientId(): Promise<string> {
+    return process.env['GOOGLE_SERVER_CLIENT_ID'] as string;
+  }
 }

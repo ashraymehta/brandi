@@ -1,10 +1,16 @@
 import {SetupData} from './setup.step';
 import {ServerStep} from './server-setup.step';
 import {SecretsSetupStep} from './secrets-setup.step';
+import {PassportSetup} from './passport-setup.step';
 import {DependencyInjectionStep} from './dependency-injection.step';
 
 export class AllSetupSteps {
-  private readonly steps = [new DependencyInjectionStep(), new ServerStep(), new SecretsSetupStep()];
+  private readonly steps = [
+    new DependencyInjectionStep(),
+    new ServerStep(),
+    new SecretsSetupStep(),
+    new PassportSetup(),
+  ];
 
   async execute(): Promise<SetupData> {
     const setupData = {} as SetupData;
