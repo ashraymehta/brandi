@@ -17,5 +17,5 @@ REMOVE_BG_API_KEY=<remove-bg-key>
 RITEKIT_API_BASE_URL=https://api.ritekit.com/
 RITEKIT_API_KEY=<ritekit-api-key>
 GOOGLE_SIGN_IN_CLIENT_ID=<google-sign-in-client-id>
-GOOGLE_SERVER_CLIENT_ID=<google-server-client-id>
+JWT_SIGNING_KEY=<jwt-signing-key>
 ```
