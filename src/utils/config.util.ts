@@ -43,10 +43,6 @@ export class ConfigUtil {
     return process.env['REMOVE_BG_API_KEY'] as string;
   }
 
-  public async getGoogleSignInClientId(): Promise<string> {
-    return process.env['GOOGLE_SIGN_IN_CLIENT_ID'] as string;
-  }
-
   public async getJwtSigningToken(): Promise<string> {
     return process.env['JWT_SIGNING_KEY'] as string;
   }
