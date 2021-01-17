@@ -13,7 +13,7 @@ export class PassportSetup implements SetupStep {
         const verifier = setupData.container.get(GoogleSignInTokenVerifier);
         verifier
           .verify(token)
-          .then(() =>{ 
+          .then(() => {
             PassportSetup.logger.info(`Authentication successful.`);
             done(null, true);
           })

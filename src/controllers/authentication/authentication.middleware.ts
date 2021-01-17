@@ -1,5 +1,5 @@
-import passport from "passport";
+import passport from 'passport';
 
 export default () => {
-    return passport.authenticate('bearer', { session: false });
-}
+  return passport.authenticate('bearer', {session: false});
+};

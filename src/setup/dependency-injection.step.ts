@@ -27,7 +27,9 @@ export class DependencyInjectionStep implements SetupStep {
     const googleServerClientId = await configUtil.getGoogleServerClientId();
     container
       .bind(GoogleSignInTokenVerifier)
-      .toDynamicValue(() => new GoogleSignInTokenVerifier(googleServerClientId, new OAuth2Client(googleSignInClientId)));
+      .toDynamicValue(
+        () => new GoogleSignInTokenVerifier(googleServerClientId, new OAuth2Client(googleSignInClientId)),
+      );
 
     await this.configureS3(configUtil, container);
 
