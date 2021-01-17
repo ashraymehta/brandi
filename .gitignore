@@ -59,6 +59,7 @@ typings/
 
 # Transpiled JavaScript files from Typescript
 /dist
+.webpack
 
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
