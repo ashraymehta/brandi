@@ -1,15 +1,16 @@
 import {SetupData, SetupStep} from './setup.step';
-import {getLogger} from '../utils/logger.util';
-import passport = require('passport');
 import {Strategy, ExtractJwt} from 'passport-jwt';
 import {ConfigUtil} from '../utils/config.util';
+import {randomBytes} from 'crypto';
+import passport = require('passport');
 
 export class PassportSetup implements SetupStep {
   async execute(setupData: SetupData): Promise<void> {
     const configUtil = setupData.container.get(ConfigUtil);
+    const signingToken = await configUtil.getJwtSigningToken();
     var options = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: await configUtil.getJwtSigningToken(),
+      secretOrKey: signingToken ? signingToken : randomBytes(32),
     };
     passport.use(new Strategy(options, (_, done) => done(null, true)));
   }
