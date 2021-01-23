@@ -3,7 +3,7 @@ import {BrandService} from '../services';
 import {constants as HttpStatusCodes} from 'http2';
 import authenticationMiddleware from './authentication/authentication.middleware';
 import {controller, httpGet, queryParam, response} from 'inversify-express-utils';
-import { getLogger } from '../utils/logger.util';
+import {getLogger} from '../utils/logger.util';
 
 @controller('/logo', authenticationMiddleware())
 export class LogoController {
@@ -32,7 +32,7 @@ export class LogoController {
     }
 
     this.logger.info(`Found the logo for brand [${brandName}]. Returning it.`);
-    
+
     response
       .status(HttpStatusCodes.HTTP_STATUS_OK)
       .contentType(logo?.contentType as string)
