@@ -3,10 +3,12 @@ import {BrandService} from '../services';
 import {constants as HttpStatusCodes} from 'http2';
 import authenticationMiddleware from './authentication/authentication.middleware';
 import {controller, httpGet, queryParam, response} from 'inversify-express-utils';
+import { getLogger } from '../utils/logger.util';
 
 @controller('/logo', authenticationMiddleware())
 export class LogoController {
   private readonly brandService: BrandService;
+  private readonly logger = getLogger(LogoController.name);
 
   constructor(brandService: BrandService) {
     this.brandService = brandService;
@@ -24,10 +26,13 @@ export class LogoController {
 
     const logo = await this.brandService.findLogoBy(brandName.trim());
     if (!logo) {
+      this.logger.info(`Could not find the logo for brand [${brandName}].`);
       response.status(HttpStatusCodes.HTTP_STATUS_NOT_FOUND).end();
       return;
     }
 
+    this.logger.info(`Found the logo for brand [${brandName}]. Returning it.`);
+    
     response
       .status(HttpStatusCodes.HTTP_STATUS_OK)
       .contentType(logo?.contentType as string)
