@@ -24,6 +24,8 @@
     "clean": "rm -rf dist *.tsbuildinfo",
     "presls-deploy": "npm run build",
     "sls-deploy": "serverless deploy --verbose --stage dev",
+    "presls-deploy-prod": "npm run build",
+    "sls-deploy-prod": "serverless deploy --verbose --stage production",
     "sls-cleanup": "serverless remove --verbose --stage dev",
     "presls-offline": "npm run build",
     "sls-offline": "serverless offline --stage local"
@@ -72,6 +74,7 @@
     "serverless": "^1.74.0",
     "serverless-api-gateway-throttling": "^1.0.1",
     "serverless-apigw-binary": "0.4.4",
+    "serverless-domain-manager": "^5.1.0",
     "serverless-dotenv-plugin": "2.4.2",
     "serverless-offline": "6.4.0",
     "serverless-s3-local": "0.6.2",

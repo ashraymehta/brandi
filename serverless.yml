@@ -7,8 +7,9 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-s3-local
-  - serverless-dotenv-plugin
   - serverless-apigw-binary
+  - serverless-dotenv-plugin
+  - serverless-domain-manager
   - serverless-api-gateway-throttling
 
 provider:
@@ -49,6 +50,14 @@ custom:
     directory: s3/${self:provider.stage}
   dotenv:
     basePath: ./config/
+  customDomain:
+    domainName: ${env:DOMAIN}
+    basePath: ''
+    stage: ${self:provider.stage}
+    certificateArn: ${env:AWS_CERT_ARN}
+    createRoute53Record: true
+    apiType: rest
+    autoDomain: true
   webpack:
     includeModules:
       forceExclude:
