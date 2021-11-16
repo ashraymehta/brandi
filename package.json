@@ -34,7 +34,7 @@
     "type": "git"
   },
   "dependencies": {
-    "aws-sdk": "2.709.0",
+    "aws-sdk": "2.814.0",
     "aws-serverless-express": "^3.3.8",
     "express": "4.17.1",
     "google-auth-library": "^6.1.4",
